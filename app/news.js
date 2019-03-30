@@ -42,6 +42,29 @@ const createRouter = connection => {
         });
     });
 
+    router.post('/', upload.single('image'), (req, res) => {
+        const news = req.body;
+
+        if (!news.title || !news.description) {
+            res.status(400).send('Missing required fields, please check');
+        } else {
+
+            if (req.file) {
+                news.image = req.file.filename;
+            }
+
+            connection.query('INSERT INTO `news` (`title`, `description`, `datetime`, `image`) VALUES (?, ?, ?, ?)',
+                [news.title, news.description, news.datetime, news.image],
+                (error) => {
+                    if (error) {
+                        res.status(500).send({error: 'Database error'});
+                    }
+                    res.send({message: 'OK'});
+                }
+            );
+        }
+    });
+
     router.delete('/:id', (req, res) => {
         connection.query('DELETE FROM `news` WHERE `id` = ?', req.params.id, (error) => {
             if (error) {
