@@ -53,9 +53,12 @@ const createRouter = connection => {
                 news.image = req.file.filename;
             }
 
+            news.datetime = new Date().toISOString();
+
             connection.query('INSERT INTO `news` (`title`, `description`, `datetime`, `image`) VALUES (?, ?, ?, ?)',
                 [news.title, news.description, news.datetime, news.image],
                 (error) => {
+                console.log(error);
                     if (error) {
                         res.status(500).send({error: 'Database error'});
                     }
