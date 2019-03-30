@@ -3,6 +3,7 @@ const cors = require('cors');
 const mysql = require('mysql');
 
 const news = require('./app/news');
+const comments = require('./app/comments');
 
 const app = express();
 app.use(cors());
@@ -17,6 +18,7 @@ const connection = mysql.createConnection({
 });
 
 app.use('/news', news(connection));
+app.use('/comments', comments(connection));
 
 const port = 8000;
 
